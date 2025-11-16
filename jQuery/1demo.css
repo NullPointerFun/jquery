@@ -1,0 +1,147 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+h3 {
+    margin: 20px;
+}
+
+body {
+    background-color: rgb(226, 233, 238);
+    text-align: center;
+}
+
+#center {
+    width: 600px;
+    background-color: white;
+    border-radius: 20px;
+    margin: 10px auto;
+    padding: 20px;
+}
+
+#center h4 {
+    text-align: left;
+    margin: 20px;
+}
+
+
+/* 写留言区域 */
+
+#leave h4 {
+    font-size: 18px;
+    color: #333;
+}
+
+#leave #txtArea {
+    width: 100%;
+    font-size: 18px;
+    margin: 0 auto;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+    /* 渐变背景 */
+    background: linear-gradient(135deg, #f8f8f8, #fff);
+    /* 添加阴影 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+}
+
+#submitBtn {
+    padding: 5px 20px;
+    font-size: 14px;
+    background-color: #9acd9c;
+    /* 默认背景色 */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    /* 添加过渡效果 */
+}
+
+#submitBtn:hover {
+    background-color: #388e3c;
+    /* 鼠标划过时的背景色 */
+}
+
+
+
+/* 精选留言区域的样式 */
+#list ul {
+    list-style: none;
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+}
+
+#list ul li {
+    width: 100%;
+    height: auto;
+    margin: 30px 0;
+    position: relative;
+}
+
+#list .avaimg {
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    /* background-color: aquamarine; */
+}
+
+#list .infobox {
+    margin-left: 80px;
+    font-family: '华文中宋', sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 475px;
+    /* 确保宽度有限 */
+    /* background-color: aqua; */
+}
+
+#list .infobox .nickname {
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+}
+
+#list .infobox .msgbox {
+    font-size: 20px;
+    line-height: 1.5;
+    color: #555;
+    word-wrap: break-word;
+    /* 强制换行 */
+
+    /* word-break: break-all;强制中文换行 */
+    /* white-space: pre-wrap;保留换行符 */
+    /* overflow-wrap: anywhere;现代浏览器强制换行 */
+    /* background-color: #8e6338; */
+}
+
+.deleteBtn {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 5px 10px;
+    font-size: 12px;
+    background-color: #cccac9;
+    /* 默认背景色 */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    /* 添加过渡效果 */
+}
+
+.deleteBtn:hover {
+    background-color: #e53935;
+    /* 鼠标移入时的背景色 */
+}

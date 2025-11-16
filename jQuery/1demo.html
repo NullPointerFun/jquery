@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/demo.css">
+    <script src="../js/jquery-1.12.3.js"></script>
+</head>
+
+<body>
+    <!--标题-->
+    <h3>简易留言板效果</h3>
+    <hr>
+    <!--留言板区域-->
+    <div id="center">
+
+        <!--写留言区域-->
+        <div id="leave">
+            <!--标题-->
+            <h4>写留言</h4>
+            <!--多行文本框-->
+
+            <textarea id="txtArea" rows="7"></textarea>
+
+
+
+
+
+            <!--提交按钮-->
+            <button id="submitBtn">提交</button>
+
+        </div>
+
+
+        <!--精选留言-->
+        <div id="list">
+            <!--标题-->
+            <h4>精选留言</h4>
+            <!--留言列表-->
+            <ul>
+                <li>
+                    <img class="avaimg" src="../img/1.png" alt="">
+                    <div class="infobox">
+                        <div class="nickname">小兔</div>
+                        <div class="msgbox">新年快乐,每天开心</div>
+                        <button class="deleteBtn">删除</button>
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <script>
+        //初始化参数
+        //var avaimg = "../img/1.png";
+        var nickname = "小兔";
+        var userCount = 1;
+
+        //追加留言到列表
+        function appendMsg(msg) {
+
+            // 处理换行符，将 \n 替换为 <br>
+            msg = msg.replace(/\n/g, "<br>");
+
+
+            //生成随机头像
+            var imgNumber = Math.floor(Math.random() * 5) + 1;//随机数的范围1—5，在5张图片中随机选择一张
+            var avaimg = `../img/${imgNumber}.png`;
+
+
+            //打印avaimg的值来检查是否正确
+            console.log("avaimg:", avaimg)
+
+
+            //留言列表末尾追加新留言
+            $("#list ul").append("<li></li>");
+            //获取新留言的li元素
+            var li = $("#list ul>li:last-child");
+
+            //设置新留言的头像
+            var avaimgHtml = '<img class="avaimg" src="' + avaimg + '" alt="">';
+            li.append(avaimgHtml);
+
+
+
+            //添加留言文字区域
+            li.append('<div class="infobox"></div>');
+
+            //生成昵称
+            var nicknameHtml = '<div class="nickname">用户' + userCount + '</div>';
+
+            //生成留言内容
+            var msgboxHtml = '<div class="msgbox">' + msg + '</div>';
+
+            //生成删除按钮
+            var deleteBtnHtml = '<button class="deleteBtn">删除</button>';
+
+            //添加昵称和留言内容到留言文字区域
+            $("#list ul>li:last-child .infobox").append(nicknameHtml, msgboxHtml, deleteBtnHtml);
+
+            //更新用户计数
+            userCount++;
+
+        }
+
+
+
+
+        $(document).ready(function () {
+            //提交按钮点击事件
+            $("#submitBtn").click(function () {
+                //获取文本框内容
+                var msg = $("#txtArea").val();
+                //判断是否为空
+                if (msg == "") {
+                    alert("尚未填写任何内容！");
+                } else {
+                    //处理换行符，将 \n 替换为 <br>
+                    msg = msg.replace(/\n/g, "<br>");
+                    //追加留言到列表
+                    appendMsg(msg);
+                    //清空文本框
+                    $("#txtArea").val("").css("opacity,1").animate({ opacity: 0 }, 5000, function () {
+                        $(this).val("").css("opacity,1");
+                    });
+                }
+            });
+
+            // 删除留言按钮点击事件
+            $("#list").on("click", ".deleteBtn", function () {
+                var deleteBtn = $(this);
+                //获取当前按钮所在的li元素
+                var li = deleteBtn.closest("li");
+                li.fadeOut(500, function () {
+                    li.remove();
+                });
+
+            })
+
+        })    
+    </script>
+
+
+
+
+</body>
+
+</html>
