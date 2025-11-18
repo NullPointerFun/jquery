@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>6.相册三种动画</title>
+    <script src="js/jquery-1.12.3.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      ul {
+        list-style: none;
+        width: 780px;
+        margin: 0 auto; /* 快速居中 */
+
+        /* 什么用法!!! */
+        display: flex; /* 使用flex布局避免浮动计算 */
+
+        /* 什么用法!!! */
+        flex-wrap: wrap; /* 自动换行 */
+      }
+      li {
+        float: left;
+        width: 250px;
+        height: 167px;
+        margin: 5px;
+      }
+      img {
+        width: 250px;
+        height: 167px;
+      }
+      #btnBox {
+        border: 1px solid #000;
+
+        /* 什么用法!!! */
+        box-sizing: border-box; /*使用这个属性可以确保按钮容器的边框不会导致其总宽度超出父元素的限制，保持布局整齐。*/
+      }
+      hr {
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <ul class="imgBox">
+      <li>
+        <img src="images/big-1.jpg" alt="" />
+      </li>
+      <li>
+        <img src="images/big-2.jpg" alt="" />
+      </li>
+      <li>
+        <img src="images/big-3.jpg" alt="" />
+      </li>
+      <li>
+        <img src="images/big-4.jpg" alt="" />
+      </li>
+      <li id="btnBox">
+        <!-- label方法可以使鼠标在方式一的范围都可以点击到radio框 -->
+
+        <label><input type="radio" name="way" value="1" checked />方式一</label>
+
+        <!-- 只有方式一的单选按钮包含了checked属性，这意味着当页面首次加载时，方式一会被默认选中。 -->
+        <input type="radio" name="way" value="2" />方式二
+        <input type="radio" name="way" value="3" />方式三
+        <hr />
+        <button id="toogle">显示/隐藏</button>
+        <button id="fadeToogle">淡入/淡出</button>
+        <button id="slideToogle">滑动显示/隐藏</button>
+      </li>
+      <li>
+        <img src="images/big-5.jpg" alt="" />
+      </li>
+      <li>
+        <img src="images/big-6.jpg" alt="" />
+      </li>
+      <li>
+        <img src="images/big-7.jpg" alt="" />
+      </li>
+      <li>
+        <img src="images/big-8.jpg" alt="" />
+      </li>
+    </ul>
+
+    <script>
+      $(document).ready(function () {
+        //鼠标悬停效果
+        $("li:not(#btnBox)").hover(function () {
+          $(this).css({
+            transform: "scale(1.1)", //// 放大1.1倍
+            boxShadow: "0 0 20px 0 red",
+            zIndex: 2 /*zIndex在这里用于控制图片的堆叠顺序，确保悬停的图片显示在其他图片之上。！！数值越大，越靠前！！*/,
+          });
+        });
+        //鼠标移除效果
+        $("li").mouseleave(function () {
+          $(this).css({
+            transform: "scale(1)", // 恢复原始大小
+            boxShadow: "none",
+            zIndex: 1,
+            // ！！又恢复到1，这样的话，鼠标悬停到页面上的时候，红色阴影就会全部显示出来，而不会被其他的图片所遮挡！！
+          });
+        });
+
+        //显示隐藏动画效果
+        $("#toogle").click(function () {
+          var way = $(":checked").val(); // 获取选中的方式
+          console.log(way);
+          if (way == 1) {
+            //顺时针显示，隐藏
+            var queue = [0, 1, 2, 4, 7, 6, 5, 3]; //eq（用于选择指定序号为n的元素）序号是从“0”开始计数          //nth-child（用于筛选页面上每个父元素中的第n个子元素）序号是从“1”开始计数
+            var i = 0;
+            var nextAnimate = function () {
+              //递归动画函数
+              $("img").eq(queue[i]).toggle("fast", nextAnimate); //逐个切换显示状态        //通过使用eq()来遍历img图片的顺序
+              i++;
+            };
+            nextAnimate();
+          } else if (way == 2) {
+            //逆时针显示，隐藏
+            var queue = [0, 3, 5, 6, 7, 4, 2, 1];
+            var i = 0;
+            var nextAnimate = function () {
+              $("img").eq(queue[i]).toggle("fast", nextAnimate);
+              i++;
+            };
+            nextAnimate();
+          } else {
+            //一定顺序--(对角线)显示，隐藏
+            var queue = [0, 7, 2, 5, 1, 6, 3, 4];
+            var i = 0;
+            var nextAnimate = function () {
+              $("img").eq(queue[i]).toggle("fast", nextAnimate);
+              i++;
+            };
+            nextAnimate();
+          }
+        });
+
+        //淡入淡出动画效果
+        $("#fadeToogle").click(function () {
+          var way = $(":checked").val();
+          // 获取当前checked勾选的是方式几，存到queue中
+          var queue = [];
+          if (way == 1) {
+            //顺时针显示，隐藏
+            queue = [0, 1, 2, 4, 7, 6, 5, 3];
+          } else if (way == 2) {
+            //逆时针显示，隐藏
+            queue = [0, 3, 5, 6, 7, 4, 2, 1];
+          } else {
+            queue = [0, 7, 2, 5, 1, 6, 3, 4];
+          }
+          var i = 0;
+
+          // for(;i<$("img").length;i++){
+          //   $("img").eq(i).fadeToggle("fast",function());
+          // }
+          var nextAnimate = function () {
+            // if (i < queue.length) {
+            //   $("img").eq(queue[i]).fadeToggle("fast", nextAnimate);
+            //   i++;
+            // }
+
+            if (queue.length > 0) {
+              $("img").eq(queue.shift()).fadeToggle("fast", nextAnimate);
+              // i++;
+            }
+          };
+          nextAnimate();
+        });
+
+        //滑动显示隐藏动画效果
+        // $("#slideToogle").click(function () {
+        //   var way = $(":checked").val();
+        //   console.log(way);
+        //   if (way == 1) {
+        //     //顺时针显示，隐藏
+        //     var queue = [0, 1, 2, 4, 7, 6, 5, 3];
+        //     var i = 0;
+        //     var nextAnimate = function () {
+        //       $("img").eq(queue[i]).toggle("fast", nextAnimate);
+        //       i++;
+        //     };
+        //     nextAnimate();
+        //   } else if (way == 2) {
+        //     //逆时针显示，隐藏
+        //     var queue = [0, 3, 5, 6, 7, 4, 2, 1];
+        //     var i = 0;
+        //     var nextAnimate = function () {
+        //       $("img").eq(queue[i]).toggle("fast", nextAnimate);
+        //       i++;
+        //     };
+        //     nextAnimate();
+        //   } else {
+        //     //一定顺序显示，隐藏
+        //     var queue = [0, 7, 2, 5, 1, 6, 3, 4];
+        //     var i = 0;
+        //     var nextAnimate = function () {
+        //       $("img").eq(queue[i]).toggle("fast", nextAnimate);
+        //       i++;
+        //     };
+        //     nextAnimate();
+        //   }
+        // });
+
+        //滑动显示/影藏
+        $("#slideToogle").click(function () {
+          var way = $(":checked").val();
+          var queue = [];
+          if (way == 1) {
+            queue = [0, 1, 2, 4, 7, 6, 5, 3];
+          } else if (way == 2) {
+            queue = [0, 3, 5, 6, 7, 4, 2, 1];
+          } else {
+            queue = [0, 7, 2, 5, 1, 6, 3, 4];
+          }
+          var i = 0;
+          var nextAnimate = function () {
+            if (i < queue.length) {
+              $("img").eq(queue[i]).slideToggle("fast", nextAnimate);
+              i++;
+            }
+          };
+          nextAnimate();
+        });
+      });
+    </script>
+  </body>
+</html>
